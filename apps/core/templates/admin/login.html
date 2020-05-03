@@ -1,0 +1,10 @@
+{% extends "admin/login.html" %}
+
+{% load static core_extra %}
+
+{% block content %}
+    <div style="text-align:center">
+        <img class="text-center" style="width: 50%;" src="{% static 'img/logo_wehelp_admin.png' %}" alt="{% setting 'ADMIN_SITE_HEADER' %}" >
+    </div>
+    {{ block.super }}
+{% endblock %}

@@ -1,0 +1,38 @@
+#branding {
+    height: 102px;
+}
+
+#branding #site-name {
+    width: 150px;
+}
+
+.select2-container--jet .select2-dropdown {
+    z-index: 9999;
+}
+
+.select2-selection.select2-selection--single.error {
+    border-color: red;
+}
+
+.changeform-tabs-item a, .changeform-tabs-item a:hover, .changeform-tabs-item a:visited {
+    color: #5a687e;
+}
+div.breadcrumbs a, div.breadcrumbs a:visited {
+    color: #5a687e;
+}
+
+img[src$="admin/img/icon-yes.gif"]+span, img[src$="admin/img/icon-yes.svg"]+span {
+    color: green;
+}
+
+img[src$="admin/img/icon-no.gif"]+span, img[src$="admin/img/icon-no.svg"]+span {
+    color: red;
+}
+.results_on_deck .ui-icon-trash {
+    background-image: url(/static/img/ui-icons_256x240.png)!important;
+    background-position: -176px -96px!important;
+}
+form .aligned .results_on_deck {
+    margin-left: 11.42857rem!important;
+    padding: 5px 0 0 0!important;
+}

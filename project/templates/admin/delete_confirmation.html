@@ -1,0 +1,69 @@
+{% extends "admin/base_site.html" %}
+
+<!-- LOADING -->
+{% load i18n admin_urls %}
+
+<!-- COLTYPE/BODYCLASS-- >
+{% block bodyclass %}grp-delete-confirmation{% endblock %}
+{% block content-class %}{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+    <div class="g-d-c">
+        {% if perms_lacking or protected %}
+            <div class="grp-group">
+                {% if perms_lacking %}
+                    <h2>{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:{% endblocktrans %}</h2>
+                    <ul class="grp-nested-list">
+                        {% for obj in perms_lacking %}
+                            <li>{{ obj }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if protected %}
+                    <h2>{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would require deleting the following protected related objects:{% endblocktrans %}</h2>
+                    <ul class="grp-nested-list">
+                        {% for obj in protected %}
+                            <li>{{ obj }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="grp-group">
+                <h2>{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object_name }} "{{ escaped_object }}"? All of the following related items will be deleted:{% endblocktrans %}</h2>
+                {% include "admin/includes/object_delete_summary.html" %}
+                <ul class="grp-nested-list">{{ deleted_objects|unordered_list }}</ul>
+            </div>
+            <form id="delef" action="" method="post">{% csrf_token %}
+                <div class="grp-module grp-submit-row grp-fixed-footer">
+                    <div class="submit-row">
+                        {% url opts|admin_urlname:'change' object.pk|admin_urlquote as object_url %}
+                        <input type="submit" value="{% trans "Submit" %}" class="grp-button grp-default" />
+                        <input id="deltxt" style="width: 300px" type="text" value="" placeholder="Please enter 'DELETE PLEASE'" class="grp-button grp-default" />
+                        <a href="{% add_preserved_filters object_url %}" class="grp-button grp-cancel-link">{% trans "Cancel" %}</a>
+                    </div>
+
+                    <input type="hidden" name="post" value="yes" />
+                    {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+                    {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                $('#delef').on('submit', function(e) {
+                    var val = $('#deltxt').val();
+                    if (val != 'DELETE PLEASE') {
+                        e.preventDefault();
+                        $('#deltxt').val('');
+                        $('#deltxt').focus();
+                        $('#deltxt').css('border', '2px solid red');
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

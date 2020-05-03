@@ -1,0 +1,10 @@
+bind = '0.0.0.0:8032'
+pidfile = '/var/www/wehelp-api/gunicorn.pid'
+errorlog = '/var/log/gunicorn/error.log'
+accesslog = '/var/log/gunicorn/access.log'
+workers = 10
+worker_class = 'uvicorn.workers.UvicornWorker'
+worker_connections = 1000
+max_requests = 100
+max_requests_jitter = 30
+graceful_timeout = 10

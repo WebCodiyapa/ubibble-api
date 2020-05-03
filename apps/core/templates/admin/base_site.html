@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+
+{% load i18n compress static core_extra %}
+
+{% block title %}{{ title }} | {% setting 'ADMIN_SITE_HEADER' %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrahead %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/logo_icon.png' %}"/>
+    {% compress css %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/style-admin.css" media="all">
+    {% endcompress %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        var django = django || {};
+        django.jQuery = jQuery.noConflict(true);
+    </script>
+{% endblock %}
+
+{# Setup branding #}
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            {# Your logo here #}
+            <img src="{% static 'img/logo_admin.png' %}" alt="{% setting 'ADMIN_SITE_HEADER' %}" height="100%" width="100%">
+            </span>
+        </a>
+    </h1>
+{% endblock %}

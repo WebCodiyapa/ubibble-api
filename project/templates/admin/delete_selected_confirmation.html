@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+
+<!-- LOADING -->
+{% load i18n l10n admin_urls %}
+
+<!-- COLTYPE/BODYCLASS-- >
+{% block bodyclass %}grp-delete-confirmation{% endblock %}
+{% block content-class %}{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+    <div class="g-d-c">
+        {% if perms_lacking or protected %}
+            <div class="grp-group">
+                {% if perms_lacking %}
+                    <h2>{% blocktrans %}Deleting the selected {{ objects_name }} would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:{% endblocktrans %}</h2>
+                    <ul class="grp-nested-list">
+                        {% for obj in perms_lacking %}
+                            <li>{{ obj }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if protected %}
+                    <h2>{% blocktrans %}Deleting the selected {{ objects_name }} would require deleting the following protected related objects:{% endblocktrans %}</h2>
+                    <ul class="grp-nested-list">
+                        {% for obj in protected %}
+                            <li>{{ obj }}</li>
+                        {% endfor %}
+                     </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="grp-group">
+                <h2>{% blocktrans %}Are you sure you want to delete the selected {{ objects_name }}? All of the following objects and their related items will be deleted:{% endblocktrans %}</h2>
+                {% include "admin/includes/object_delete_summary.html" %}
+                {% for deleteable_object in deletable_objects %}
+                    <ul class="grp-nested-list">{{ deleteable_object|unordered_list }}</ul>
+                {% endfor %}
+            </div>
+            <form id="delef" action="" method="post">{% csrf_token %}
+                <div id="submit" class="grp-module grp-submit-row grp-fixed-footer">
+                    {% for obj in queryset %}
+                        <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}" />
+                    {% endfor %}
+                    <input type="hidden" name="action" value="delete_selected" />
+                    <input type="hidden" name="post" value="yes" />
+
+                    <div class="submit-row">
+                        <input type="submit" value="{% trans "Submit" %}" class="grp-button grp-default" />
+                        <input id="deltxt" style="width: 300px" type="text" value="" placeholder="Please enter 'DELETE PLEASE'" class="grp-button grp-default" />
+                        <a href="." class="button">{% trans "Cancel" %}</a>
+                    </div>
+
+                    <input type="hidden" name="post" value="yes" />
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                $('#delef').on('submit', function(e) {
+                    var val = $('#deltxt').val();
+                    if (val != 'DELETE PLEASE') {
+                        e.preventDefault();
+                        $('#deltxt').val('');
+                        $('#deltxt').focus();
+                        $('#deltxt').css('border', '2px solid red');
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

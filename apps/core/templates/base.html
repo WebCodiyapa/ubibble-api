@@ -1,0 +1,19 @@
+<!doctype html>
+
+{% load compress %}
+{% load core_extra %}
+
+<html>
+<head>
+	<head>
+        <title>{% block title %}Project{% endblock %}</title>
+    </head>
+	<body>
+        {{ config.ANALYTIC_BODY_START | safe }}
+
+		{% block content %}
+		{% endblock %}
+
+        {{ config.ANALYTIC_JS | safe }}
+	</body>
+</html>
